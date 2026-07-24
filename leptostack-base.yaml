@@ -1,7 +1,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: dev
+  name: base
   namespace: flux-system
 spec:
   interval: 720m0s
@@ -15,7 +15,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./leptostack/dev
+  path: ./leptostack/base
   prune: true
   wait: true
   commonMetadata:
@@ -35,7 +35,7 @@ spec:
   interval: 720m0s
   timeout: 10m
   dependsOn:
-    - name: dev
+    - name: base
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -59,7 +59,7 @@ spec:
   interval: 720m0s
   timeout: 10m
   dependsOn:
-    - name: dev
+    - name: base
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -107,7 +107,7 @@ spec:
   interval: 720m0s
   timeout: 10m
   dependsOn:
-    - name: dev
+    - name: base
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -371,7 +371,7 @@ spec:
   interval: 720m0s
   timeout: 10m
   dependsOn:
-    - name: dev
+    - name: base
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -395,7 +395,7 @@ spec:
   interval: 720m0s
   timeout: 10m
   dependsOn:
-    - name: dev
+    - name: base
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -467,7 +467,7 @@ spec:
   interval: 720m0s
   timeout: 10m
   dependsOn:
-    - name: dev
+    - name: base
   sourceRef:
     kind: GitRepository
     name: flux-system
