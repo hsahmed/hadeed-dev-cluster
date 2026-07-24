@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: flux-system
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
+  namespace: metallb-system
+data:
+  config: |
+    address-pools:
+    - name: default
+      protocol: layer2
+      addresses:
+      - 192.168.49.100-192.168.49.110
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: leptostack-config
+  namespace: flux-system
+data:
+  cluster_name: local
+  leptostack_domain: minikube.test
+  leptostack_name: portal
+  apisix_lb_ip: 192.168.49.100
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: internal-issuer
+    k8s.apisix.apache.org/plugin-config-name: registry-plugin-config
+  name: registry-ingress
+  namespace: kube-system
+spec:
+  ingressClassName: apisix
+  tls:
+    - hosts:
+        - registry.minikube.test
+      secretName: registry-tls
+  rules:
+  - host: registry.minikube.test
+    http:
+      paths:
+      - backend:
+          service:
+            name: registry
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
