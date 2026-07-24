@@ -7,7 +7,7 @@ spec:
   interval: 720m0s
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: leptostack-base
   serviceAccountName: kustomize-controller
   path: ./infrastructure/cert-manager
   prune: true
@@ -25,7 +25,7 @@ spec:
     - name: cert-manager
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: leptostack-base
   serviceAccountName: kustomize-controller
   path: ./infrastructure/trust-manager
   prune: true
@@ -41,7 +41,7 @@ spec:
   interval: 720m0s
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: leptostack-base
   serviceAccountName: kustomize-controller
   path: ./infrastructure/external-secrets
   prune: true
@@ -57,7 +57,7 @@ spec:
   interval: 720m0s
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: leptostack-base
   serviceAccountName: kustomize-controller
   path: ./infrastructure/crossplane
   prune: true
@@ -75,7 +75,7 @@ spec:
     - name: cert-manager
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: leptostack-base
   serviceAccountName: kustomize-controller
   path: ./infrastructure/operators
   prune: true
