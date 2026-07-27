@@ -1,18 +1,5 @@
 # LeptoStack Base configuration -- DO NOT CHANGE
 ---
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: config
-  namespace: metallb-system
-data:
-  config: |
-    address-pools:
-    - name: default
-      protocol: layer2
-      addresses:
-      - ${leptostack_metallb_subnet}
----
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
