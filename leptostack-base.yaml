@@ -14,7 +14,7 @@ spec:
     - name: operators
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: leptostack-base
   path: ./leptostack/base
   prune: true
   wait: true
@@ -38,7 +38,7 @@ spec:
     - name: base
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: leptostack-base
   path: ./leptostack/valkey
   prune: true
   wait: true
@@ -62,7 +62,7 @@ spec:
     - name: base
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: leptostack-base
   path: ./leptostack/apisix
   prune: true
   wait: true
@@ -77,7 +77,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: apisix-post-deploy
+  name: apisix-post
   namespace: flux-system
 spec:
   interval: 720m0s
@@ -86,8 +86,8 @@ spec:
     - name: apisix
   sourceRef:
     kind: GitRepository
-    name: flux-system
-  path: ./leptostack/apisix-post-deploy
+    name: leptostack-base
+  path: ./leptostack/apisix-post
   prune: true
   wait: true
   commonMetadata:
@@ -110,7 +110,7 @@ spec:
     - name: base
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: leptostack-base
   path: ./leptostack/openbao
   prune: true
   wait: true
@@ -134,7 +134,7 @@ spec:
     - name: openbao
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: leptostack-base
   path: ./leptostack/openbao-init
   prune: true
   wait: true
@@ -149,7 +149,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: openbao-post-deploy
+  name: openbao-post
   namespace: flux-system
 spec:
   interval: 720m0s
@@ -158,8 +158,8 @@ spec:
     - name: openbao-init
   sourceRef:
     kind: GitRepository
-    name: flux-system
-  path: ./leptostack/openbao-post-deploy
+    name: leptostack-base
+  path: ./leptostack/openbao-post
   prune: true
   wait: true
   commonMetadata:
@@ -173,17 +173,17 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: supabase-pre-deploy
+  name: supabase-pre
   namespace: flux-system
 spec:
   interval: 720m0s
   timeout: 10m
   dependsOn:
-    - name: openbao-post-deploy
+    - name: openbao-post
   sourceRef:
     kind: GitRepository
-    name: flux-system
-  path: ./leptostack/supabase-pre-deploy
+    name: leptostack-base
+  path: ./leptostack/supabase-pre
   prune: true
   wait: true
   commonMetadata:
@@ -197,17 +197,17 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: keycloak-pre-deploy
+  name: keycloak-pre
   namespace: flux-system
 spec:
   interval: 720m0s
   timeout: 10m
   dependsOn:
-    - name: supabase-pre-deploy
+    - name: supabase-pre
   sourceRef:
     kind: GitRepository
-    name: flux-system
-  path: ./leptostack/keycloak-pre-deploy
+    name: leptostack-base
+  path: ./leptostack/keycloak-pre
   prune: true
   wait: true
   commonMetadata:
@@ -227,10 +227,10 @@ spec:
   interval: 720m0s
   timeout: 10m
   dependsOn:
-    - name: keycloak-pre-deploy
+    - name: keycloak-pre
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: leptostack-base
   path: ./leptostack/keycloak
   prune: true
   wait: true
@@ -245,7 +245,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: keycloak-post-deploy
+  name: keycloak-post
   namespace: flux-system
 spec:
   interval: 720m0s
@@ -254,8 +254,8 @@ spec:
     - name: keycloak
   sourceRef:
     kind: GitRepository
-    name: flux-system
-  path: ./leptostack/keycloak-post-deploy
+    name: leptostack-base
+  path: ./leptostack/keycloak-post
   prune: true
   wait: true
   commonMetadata:
@@ -275,10 +275,10 @@ spec:
   interval: 720m0s
   timeout: 10m
   dependsOn:
-    - name: supabase-pre-deploy
+    - name: supabase-pre
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: leptostack-base
   path: ./leptostack/supabase
   prune: true
   wait: false
@@ -299,10 +299,10 @@ spec:
   interval: 720m0s
   timeout: 10m
   dependsOn:
-    - name: keycloak-post-deploy
+    - name: keycloak-post
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: leptostack-base
   path: ./leptostack/rabbitmq
   prune: true
   wait: false
@@ -317,7 +317,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: flowable-pre-deploy
+  name: flowable-pre
   namespace: flux-system
 spec:
   interval: 720m0s
@@ -326,8 +326,8 @@ spec:
     - name: rabbitmq
   sourceRef:
     kind: GitRepository
-    name: flux-system
-  path: ./leptostack/flowable-pre-deploy
+    name: leptostack-base
+  path: ./leptostack/flowable-pre
   prune: true
   wait: true
   commonMetadata:
@@ -347,10 +347,10 @@ spec:
   interval: 720m0s
   timeout: 10m
   dependsOn:
-    - name: flowable-pre-deploy
+    - name: flowable-pre
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: leptostack-base
   path: ./leptostack/flowable
   prune: true
   wait: true
@@ -374,7 +374,7 @@ spec:
     - name: base
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: leptostack-base
   path: ./leptostack/centrifugo
   prune: true
   wait: true
@@ -398,7 +398,7 @@ spec:
     - name: base
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: leptostack-base
   path: ./leptostack/camel-k
   prune: true
   wait: true
@@ -419,10 +419,10 @@ spec:
   interval: 720m0s
   timeout: 10m
   dependsOn:
-    - name: keycloak-post-deploy
+    - name: keycloak-post
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: leptostack-base
   path: ./leptostack/superset
   prune: true
   wait: true
@@ -437,7 +437,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: superset-post-deploy
+  name: superset-post
   namespace: flux-system
 spec:
   interval: 720m0s
@@ -446,8 +446,8 @@ spec:
     - name: superset
   sourceRef:
     kind: GitRepository
-    name: flux-system
-  path: ./leptostack/superset-post-deploy
+    name: leptostack-base
+  path: ./leptostack/superset-post
   prune: true
   wait: true
   commonMetadata:
@@ -470,7 +470,7 @@ spec:
     - name: base
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: leptostack-base
   path: ./leptostack/seaweedfs
   prune: true
   wait: false
