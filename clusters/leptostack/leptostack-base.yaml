@@ -87,7 +87,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: leptostack-base
-  path: ./leptostack/apisix-post
+  path: ./leptostack/apisix/post
   prune: true
   wait: true
   commonMetadata:
@@ -135,7 +135,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: leptostack-base
-  path: ./leptostack/openbao-init
+  path: ./leptostack/openbao/init
   prune: true
   wait: true
   commonMetadata:
@@ -159,7 +159,31 @@ spec:
   sourceRef:
     kind: GitRepository
     name: leptostack-base
-  path: ./leptostack/openbao-post
+  path: ./leptostack/openbao/post
+  prune: true
+  wait: true
+  commonMetadata:
+    labels:
+      app.kubernetes.io/part-of: leptostack
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: leptostack-config
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: pgcluster
+  namespace: flux-system
+spec:
+  interval: 720m0s
+  timeout: 10m
+  dependsOn:
+    - name: openbao-post
+  sourceRef:
+    kind: GitRepository
+    name: leptostack-base
+  path: ./leptostack/pgcluster
   prune: true
   wait: true
   commonMetadata:
@@ -179,11 +203,11 @@ spec:
   interval: 720m0s
   timeout: 10m
   dependsOn:
-    - name: openbao-post
+    - name: keycloak-pre
   sourceRef:
     kind: GitRepository
     name: leptostack-base
-  path: ./leptostack/supabase-pre
+  path: ./leptostack/supabase/pre
   prune: true
   wait: true
   commonMetadata:
@@ -203,11 +227,11 @@ spec:
   interval: 720m0s
   timeout: 10m
   dependsOn:
-    - name: supabase-pre
+    - name: pgcluster
   sourceRef:
     kind: GitRepository
     name: leptostack-base
-  path: ./leptostack/keycloak-pre
+  path: ./leptostack/keycloak/pre
   prune: true
   wait: true
   commonMetadata:
@@ -255,7 +279,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: leptostack-base
-  path: ./leptostack/keycloak-post
+  path: ./leptostack/keycloak/post
   prune: true
   wait: true
   commonMetadata:
@@ -275,7 +299,7 @@ spec:
   interval: 720m0s
   timeout: 10m
   dependsOn:
-    - name: keycloak-pre
+    - name: supabase-pre
   sourceRef:
     kind: GitRepository
     name: leptostack-base
@@ -327,7 +351,31 @@ spec:
   sourceRef:
     kind: GitRepository
     name: leptostack-base
-  path: ./leptostack/flowable-pre
+  path: ./leptostack/flowable/pre
+  prune: true
+  wait: true
+  commonMetadata:
+    labels:
+      app.kubernetes.io/part-of: leptostack
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: leptostack-config
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: flowable-rabbitmq
+  namespace: flux-system
+spec:
+  interval: 720m0s
+  timeout: 10m
+  dependsOn:
+    - name: flowable-pre
+  sourceRef:
+    kind: GitRepository
+    name: leptostack-base
+  path: ./leptostack/flowable/rabbitmq
   prune: true
   wait: true
   commonMetadata:
@@ -447,7 +495,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: leptostack-base
-  path: ./leptostack/superset-post
+  path: ./leptostack/superset/post
   prune: true
   wait: true
   commonMetadata:
