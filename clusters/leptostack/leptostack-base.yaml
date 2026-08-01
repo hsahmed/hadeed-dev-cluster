@@ -73,6 +73,13 @@ spec:
     substituteFrom:
       - kind: ConfigMap
         name: leptostack-config
+  patches:
+    - target:
+        kind: HelmRelease
+        name: apisix
+      patch: |-
+        - op: remove
+          path: /spec/values/service
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
