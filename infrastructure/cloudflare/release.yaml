@@ -30,7 +30,7 @@ spec:
       account: 8d5fa70ec9391259218a98c62edce7a9
       tunnelName: hadeed-dev
       tunnelId: 5917bac2-2c94-4de1-a591-b29ea39a3277
-      secretName: cloudflared-creds
+      secretName: cloudflare-creds
       ingress:
         - hostname: "rancher.hadeed.dev"
           service: https://rancher.cattle-system.svc.cluster.local:443
