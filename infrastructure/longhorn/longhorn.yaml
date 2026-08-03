@@ -27,4 +27,6 @@ spec:
         namespace: flux-system
   install:
     createNamespace: true
-    
+  values:
+    persistence:
+      defaultClassReplicaCount: 1
