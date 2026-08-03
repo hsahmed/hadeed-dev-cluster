@@ -135,25 +135,25 @@ spec:
   prune: false
   wait: true
   timeout: 10m
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: cloudflare
-  namespace: flux-system
-spec:
-  interval: 720m0s
-  dependsOn:
-    - name: openbao
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  serviceAccountName: kustomize-controller
-  path: ./infrastructure/cloudflare
-  prune: false
-  wait: true
-  timeout: 10m
-  postBuild:
-    substituteFrom:
-      - kind: ConfigMap
-        name: leptostack-config
+# ---
+# apiVersion: kustomize.toolkit.fluxcd.io/v1
+# kind: Kustomization
+# metadata:
+#   name: cloudflare
+#   namespace: flux-system
+# spec:
+#   interval: 720m0s
+#   dependsOn:
+#     - name: openbao
+#   sourceRef:
+#     kind: GitRepository
+#     name: flux-system
+#   serviceAccountName: kustomize-controller
+#   path: ./infrastructure/cloudflare
+#   prune: false
+#   wait: true
+#   timeout: 10m
+#   postBuild:
+#     substituteFrom:
+#       - kind: ConfigMap
+#         name: leptostack-config
