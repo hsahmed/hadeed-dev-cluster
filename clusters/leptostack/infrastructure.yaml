@@ -153,3 +153,7 @@ spec:
   prune: false
   wait: true
   timeout: 10m
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: leptostack-config
