@@ -176,6 +176,13 @@ spec:
     substituteFrom:
       - kind: ConfigMap
         name: leptostack-config
+  patches:
+    - target:
+        kind: ClusterSecretStore
+      patch: |-
+        - op: add
+          path: /spec/conditions/0/namespaces/-
+          value: cloudflare
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
