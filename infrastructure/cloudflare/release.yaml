@@ -1,0 +1,45 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: cloudflare
+  namespace: flux-system
+spec:
+  interval: 1h
+  url: https://cloudflare.github.io/helm-charts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: cloudflare-tunnel
+  namespace: flux-system
+spec:
+  releaseName: cloudflare-tunnel
+  targetNamespace: cloudflare
+  interval: 1h
+  chart:
+    spec:
+      chart: cloudflare-tunnel
+      version: "0.3.2"
+      sourceRef:
+        kind: HelmRepository
+        name: cloudflare
+        namespace: flux-system
+  values:
+    cloudflare:
+      account: 8d5fa70ec9391259218a98c62edce7a9
+      tunnelName: hadeed-dev
+      tunnelId: 5917bac2-2c94-4de1-a591-b29ea39a3277
+      secretName: cloudflared-creds
+      ingress:
+        - hostname: "rancher.hadeed.dev"
+          service: https://rancher.cattle-system.svc.cluster.local:443
+          originRequest:
+            noTLSVerify: true
+        - hostname: "*.hadeed.dev"
+          service: http://apisix-gateway.ingress-dev.svc.cluster.local:80
+          originRequest:
+            noTLSVerify: true
+    image:
+      tag: "2026.7.3"
+    replicaCount: 1
