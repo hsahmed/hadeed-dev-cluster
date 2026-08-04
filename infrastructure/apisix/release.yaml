@@ -1,0 +1,64 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: apisix
+  namespace: flux-system
+spec:
+  releaseName: apisix
+  targetNamespace: ingress-devops
+  interval: 1h
+  chart:
+    spec:
+      chart: apisix
+      version: "2.16.0"
+      sourceRef:
+        kind: HelmRepository
+        name: apisix
+        namespace: flux-system
+  values:
+    apisix:
+      deployment:
+        role: "traditional"
+        role_traditional:
+          config_provider: "yaml"
+      ssl:
+        enabled: true
+        existingCASecret: "internal-ca-bundle"
+        certCAFilename: "ca-certificates.crt"
+    etcd:
+      enabled: false
+    podSecurityContext:
+      runAsNonRoot: true
+    securityContext:
+      allowPrivilegeEscalation: false
+      runAsUser: 636
+      runAsGroup: 636
+      capabilities:
+        drop:
+          - ALL
+      seccompProfile:
+        type: RuntimeDefault
+    ingress-controller:
+      enabled: true
+      config:
+        provider:
+          type: "apisix-standalone"
+        kubernetes:
+          ingressClass: "devops-apisix"
+      apisix:
+        adminService:
+          namespace: ingress-devops
+      gatewayProxy:
+        createDefault: true
+      deployment:
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+        podSecurityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 1000
+          seccompProfile:
+            type: RuntimeDefault

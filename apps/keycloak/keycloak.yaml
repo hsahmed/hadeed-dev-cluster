@@ -1,0 +1,42 @@
+apiVersion: k8s.keycloak.org/v2alpha1
+kind: Keycloak
+metadata:
+  name: devops-sso
+  namespace: devops-keycloak
+spec:
+  db:
+    vendor: postgres
+    host: ${cluster_name}-supabase-rw.${cluster_name}-supabase.svc.cluster.local
+    database: keycloak
+    usernameSecret:
+      name: keycloak-db
+      key: username
+    passwordSecret:
+      name: keycloak-db
+      key: password
+  hostname:
+    admin: https://${leptostack_name}-sso-admin.${leptostack_domain}
+    hostname: https://${leptostack_name}-sso.${leptostack_domain}
+    strict: true
+  http:
+    tlsSecret: ${leptostack_name}-sso-tls
+  ingress:
+    enabled: false
+  instances: 1
+  proxy:
+    headers: xforwarded
+  unsupported:
+    podTemplate:
+      spec:
+        containers:
+          - securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 1000
+          seccompProfile:
+            type: RuntimeDefault

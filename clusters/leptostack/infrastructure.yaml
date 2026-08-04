@@ -139,21 +139,17 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: infra-config
+  name: devops-apisix
   namespace: flux-system
 spec:
   interval: 720m0s
   dependsOn:
-    - name: openbao
+    - name: base
   sourceRef:
     kind: GitRepository
     name: flux-system
   serviceAccountName: kustomize-controller
-  path: ./infrastructure/config
+  path: ./infrastructure/apisix
   prune: false
   wait: true
   timeout: 10m
-  postBuild:
-    substituteFrom:
-      - kind: ConfigMap
-        name: leptostack-config

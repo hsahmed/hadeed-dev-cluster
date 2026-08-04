@@ -1,0 +1,74 @@
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: "keycloak-db-secret"
+  namespace: devops-db
+spec:
+  refreshInterval: "0"
+  refreshPolicy: CreatedOnce
+  target:
+    name: keycloak-db
+    template:
+      engineVersion: v2
+      mergePolicy: Replace
+      data:
+        host: ${cluster_name}-supabase-rw.${cluster_name}-supabase.svc.cluster.local
+        port: "5432"
+        database: keycloak
+        username: keycloak
+        password: "{{ .password }}"
+  dataFrom:
+  - sourceRef:
+      generatorRef:
+        apiVersion: generators.external-secrets.io/v1alpha1
+        kind: ClusterGenerator
+        name: "password-generator"
+---
+apiVersion: external-secrets.io/v1alpha1
+kind: PushSecret
+metadata:
+  name: "keycloak-db-push-secret"
+  namespace: ${cluster_name}-supabase
+spec:
+  refreshInterval: "0"
+  secretStoreRefs:
+  - name: ${cluster_name}-bao
+    kind: ClusterSecretStore
+  selector:
+    secret:
+      name: keycloak-db
+  data:
+  - match:
+      secretKey: password
+      remoteRef:
+        remoteKey: dynamic/keycloak/keycloak-db
+        property: password
+---
+apiVersion: postgresql.sql.m.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: keycloak
+  namespace: ${cluster_name}-supabase
+spec:
+  providerConfigRef:
+    kind: ProviderConfig
+    name: supabase-postgresql
+  forProvider:
+    privileges:
+      login: true
+    passwordSecretRef:
+      name: keycloak-db
+      key: password
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: supabase-cluster-keycloak
+  namespace: ${cluster_name}-supabase
+spec:
+  name: keycloak
+  owner: keycloak
+  databaseReclaimPolicy: delete
+  cluster:
+    name: ${cluster_name}-supabase

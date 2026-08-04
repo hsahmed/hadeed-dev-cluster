@@ -1,0 +1,19 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: devops-db
+  namespace: devops-db
+spec:
+  instances: 1
+  storage:
+    size: 10Gi
+  imageCatalogRef:
+    apiGroup: postgresql.cnpg.io
+    kind: ClusterImageCatalog
+    major: 17
+    name: postgresql
+  enableSuperuserAccess: true
+  bootstrap:
+    initdb:
+      database: keycloak
+      owner: keycloak

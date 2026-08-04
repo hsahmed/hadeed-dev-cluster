@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: openbao-key
+  namespace: ${cluster_name}-openbao
+type: Opaque
+data:
+  openbao_unseal_key: ZkFmdjN5dXZtd0psS0s2ZStxWjlvNnIrVjNUMnc4Z2pPNmdzTEZMSy9RTT0=

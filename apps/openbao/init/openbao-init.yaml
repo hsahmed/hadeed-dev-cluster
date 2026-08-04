@@ -1,0 +1,140 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: openbao-init
+  namespace: ${cluster_name}-openbao
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: openbao-init
+  namespace: ${cluster_name}-openbao
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["create", "get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: openbao-init
+  namespace: ${cluster_name}-openbao
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: openbao-init
+subjects:
+  - kind: ServiceAccount
+    name: openbao-init
+    namespace: ${cluster_name}-openbao
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: openbao-init
+  namespace: ${cluster_name}-openbao
+spec:
+  template:
+    spec:
+      serviceAccountName: openbao-init
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      volumes:
+        - name: tmp
+          emptyDir: {}
+      containers:
+        - name: openbao
+          image: openbao/openbao:latest
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+          env:
+            - name: BAO_ADDR
+              value: "http://${cluster_name}-openbao-openbao.${cluster_name}-openbao.svc.cluster.local:8200"
+            - name: NAMESPACE
+              value: "${cluster_name}-openbao"
+          command:
+            - sh
+            - -c
+            - |
+              wget -O /tmp/kubectl "https://dl.k8s.io/release/v1.30.0/bin/linux/amd64/kubectl"
+              chmod +x /tmp/kubectl
+
+              MAX_RETRIES=30
+              RETRY_DELAY=10
+
+              for attempt in $(seq 1 $MAX_RETRIES); do
+                echo "=== Attempt $attempt/$MAX_RETRIES ==="
+
+                # Wait for OpenBao to respond
+                READY=false
+                for i in $(seq 1 12); do
+                  if bao status 2>&1 | grep -q "Sealed\|Initialized"; then
+                    READY=true
+                    break
+                  fi
+                  echo "Waiting for OpenBao to be ready..."
+                  sleep 5
+                done
+
+                if [ "$READY" != "true" ]; then
+                  echo "OpenBao not responding, retrying in $RETRY_DELAYs..."
+                  sleep $RETRY_DELAY
+                  continue
+                fi
+
+                if bao status 2>&1 | grep -q "Initialized.*false"; then
+                  echo "OpenBao is not initialized. Running init..."
+                  if ! bao operator init -format=json > /tmp/init-output.json 2>&1; then
+                    echo "Init failed, retrying in $RETRY_DELAYs..."
+                    sleep $RETRY_DELAY
+                    continue
+                  fi
+                  cat /tmp/init-output.json
+
+                  RECOVERY_KEYS=$(tr -d '\n' < /tmp/init-output.json | sed 's/.*"recovery_keys_b64":\s*\[\([^]]*\)\].*/\1/' | tr -d ' "')
+                  ROOT_TOKEN=$(grep -o '"root_token":\s*"[^"]*"' /tmp/init-output.json | sed 's/.*"root_token":\s*"\(.*\)"/\1/')
+
+                  if [ -z "$ROOT_TOKEN" ]; then
+                    echo "Failed to parse root token from init output. Retrying in $RETRY_DELAYs..."
+                    sleep $RETRY_DELAY
+                    continue
+                  fi
+
+                  if /tmp/kubectl -n $NAMESPACE get secret openbao-init >/dev/null 2>&1; then
+                    echo "Secret already exists. Skipping."
+                  else
+                    echo "Creating secret with init credentials..."
+                    if ! /tmp/kubectl -n $NAMESPACE create secret generic openbao-init \
+                      --from-literal=recovery_keys="$RECOVERY_KEYS" \
+                      --from-literal=root_token="$ROOT_TOKEN" \
+                      --from-literal=credentials="{\"token\":\"$ROOT_TOKEN\"}" 2>&1; then
+                      echo "Failed to create secret. Retrying in $RETRY_DELAYs..."
+                      sleep $RETRY_DELAY
+                      continue
+                    fi
+                    echo "Secret created successfully."
+                  fi
+                else
+                  echo "OpenBao is already initialized. Skipping init."
+                fi
+
+                echo "All steps completed successfully."
+                exit 0
+              done
+
+              echo "ERROR: Failed after $MAX_RETRIES attempts."
+              exit 1
+      restartPolicy: Never

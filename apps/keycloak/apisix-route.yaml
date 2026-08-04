@@ -1,0 +1,63 @@
+---
+apiVersion: apisix.apache.org/v2
+kind: ApisixUpstream
+metadata:
+  namespace: ${cluster_name}-keycloak
+  name: ${leptostack_name}-sso-service
+spec:
+  ingressClassName: ${cluster_name}-apisix
+  scheme: https
+---
+apiVersion: apisix.apache.org/v2
+kind: ApisixRoute
+metadata:
+  namespace: ${cluster_name}-keycloak
+  name: keycloak
+spec:
+  ingressClassName: ${cluster_name}-apisix
+  http:
+    - name: keycloak
+      match:
+        hosts:
+          - ${leptostack_name}-sso.${leptostack_domain}
+        paths:
+          - /*
+      plugins:
+        - name: proxy-rewrite
+          enable: true
+          config:
+            headers:
+              set:
+                X-Forwarded-Proto: https
+                X-Forwarded-Port: "443"
+                X-Forwarded-Host: ${leptostack_name}-sso.${leptostack_domain}
+      backends:
+        - serviceName: ${leptostack_name}-sso-service
+          servicePort: 8443
+---
+apiVersion: apisix.apache.org/v2
+kind: ApisixRoute
+metadata:
+  namespace: ${cluster_name}-keycloak
+  name: keycloak-admin
+spec:
+  ingressClassName: ${cluster_name}-apisix
+  http:
+    - name: keycloak
+      match:
+        hosts:
+          - ${leptostack_name}-sso-admin.${leptostack_domain}
+        paths:
+          - /*
+      plugins:
+        - name: proxy-rewrite
+          enable: true
+          config:
+            headers:
+              set:
+                X-Forwarded-Proto: https
+                X-Forwarded-Port: "443"
+                X-Forwarded-Host: ${leptostack_name}-sso-admin.${leptostack_domain}
+      backends:
+        - serviceName: ${leptostack_name}-sso-service
+          servicePort: 8443

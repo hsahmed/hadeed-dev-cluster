@@ -1,0 +1,113 @@
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: "leptostack-admin-secret"
+  namespace: ${cluster_name}-keycloak
+spec:
+  refreshInterval: "0"
+  refreshPolicy: CreatedOnce
+  target:
+    name: leptostack-admin
+    template:
+      engineVersion: v2
+      mergePolicy: Replace
+      data:
+        username: ${leptostack_name}-admin
+        password: "{{ .password }}"
+  dataFrom:
+  - sourceRef:
+      generatorRef:
+        apiVersion: generators.external-secrets.io/v1alpha1
+        kind: ClusterGenerator
+        name: "password-generator"
+---
+apiVersion: external-secrets.io/v1alpha1
+kind: PushSecret
+metadata:
+  name: "leptostack-admin-push-secret"
+  namespace: ${cluster_name}-keycloak
+spec:
+  refreshInterval: "0"
+  secretStoreRefs:
+  - name: ${cluster_name}-bao
+    kind: ClusterSecretStore
+  selector:
+    secret:
+      name: leptostack-admin
+  dataTo:
+    - storeRef:
+        name: ${cluster_name}-bao
+        kind: ClusterSecretStore
+      remoteKey: dynamic/keycloak/leptostack-admin
+---
+apiVersion: user.keycloak.m.crossplane.io/v1alpha1
+kind: User
+metadata:
+  name: ${leptostack_name}-admin
+  namespace: ${cluster_name}-keycloak
+spec:
+  providerConfigRef:
+    kind: ProviderConfig
+    name: ${cluster_name}-keycloak
+  forProvider:
+    realmId: ${leptostack_name}
+    username: ${leptostack_name}-admin
+    email: ${leptostack_name}-admin@${leptostack_domain}
+    firstName: LeptoStack
+    lastName: Admin
+    emailVerified: true
+    enabled: true
+    initialPassword:
+      - valueSecretRef:
+          name: leptostack-admin
+          key: password
+        temporary: false
+---
+apiVersion: group.keycloak.m.crossplane.io/v1alpha1
+kind: Group
+metadata:
+  name: leptostack-admins
+  namespace: ${cluster_name}-keycloak
+spec:
+  providerConfigRef:
+    kind: ProviderConfig
+    name: ${cluster_name}-keycloak
+  forProvider:
+    realmId: ${leptostack_name}
+    name: leptostack-admins
+    description: "LeptoStack Administrators"
+---
+apiVersion: group.keycloak.m.crossplane.io/v1alpha1
+kind: Roles
+metadata:
+  name: leptostack-admins-roles
+  namespace: ${cluster_name}-keycloak
+spec:
+  providerConfigRef:
+    kind: ProviderConfig
+    name: ${cluster_name}-keycloak
+  forProvider:
+    realmId: ${leptostack_name}
+    groupIdRef:
+      name: leptostack-admins
+    exhaustive: false
+    roleIds:
+      - db06501b-5427-46aa-9b79-e3c800beedf8  # realm-admin from realm-management client
+---
+apiVersion: user.keycloak.m.crossplane.io/v1alpha1
+kind: Groups
+metadata:
+  name: ${leptostack_name}-admin-groups
+  namespace: ${cluster_name}-keycloak
+spec:
+  providerConfigRef:
+    kind: ProviderConfig
+    name: ${cluster_name}-keycloak
+  forProvider:
+    realmId: ${leptostack_name}
+    exhaustive: false
+    userIdRef:
+      name: ${leptostack_name}-admin
+    groupIdsRefs:
+      - name: leptostack-admins

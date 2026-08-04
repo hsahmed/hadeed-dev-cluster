@@ -1,0 +1,53 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: openbao
+  namespace: ${cluster_name}-openbao
+spec:
+  targetNamespace: ${cluster_name}-openbao
+  interval: 1h
+  chart:
+    spec:
+      chart: openbao
+      version: "0.28.6"
+      sourceRef:
+        kind: HelmRepository
+        name: openbao
+        namespace: flux-system
+  values:
+    global:
+      psp:
+        enabled: true
+    server:
+      statefulSet:
+        securityContext:
+          container:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+      extraSecretEnvironmentVars:
+        - envName: OPENBAO_UNSEAL_KEY
+          secretName: openbao-key
+          secretKey: openbao_unseal_key
+      standalone:
+        config: |
+          ui = true
+
+          listener "tcp" {
+            tls_disable = 1
+            address = "[::]:8200"
+            cluster_address = "[::]:8201"
+            # Enable unauthenticated metrics access (necessary for Prometheus Operator)
+            #telemetry {
+            #  unauthenticated_metrics_access = "true"
+            #}
+          }
+          storage "file" {
+            path = "/openbao/data"
+          }
+
+          seal "static" {
+            current_key_id = "${leptostack_name}-openbao-key"
+            current_key = "env://OPENBAO_UNSEAL_KEY"
+          }

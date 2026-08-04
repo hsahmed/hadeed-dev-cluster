@@ -1,0 +1,33 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: devops-tls
+  namespace: ingress-devops
+spec:
+  secretName: devops-tls
+  issuerRef:
+    name: internal-issuer
+    kind: ClusterIssuer
+    group: cert-manager.io
+  dnsNames:
+    - git.hadeed.dev
+    - sso.hadeed.dev
+    - git-new.hadeed.dev
+    - apisix-ingress-controller.ingress-devops.svc.cluster.local
+---
+apiVersion: apisix.apache.org/v2
+kind: ApisixTls
+metadata:
+  name: devops-tls
+  namespace: ingress-devops
+spec:
+  ingressClassName: devops-apisix
+  hosts:
+    - git.hadeed.dev
+    - sso.hadeed.dev
+    - git-new.hadeed.dev
+    - apisix-ingress-controller.ingress-devops.svc.cluster.local
+  secret:
+    name: devops-tls
+    namespace: ingress-devops
