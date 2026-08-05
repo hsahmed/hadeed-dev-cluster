@@ -51,6 +51,9 @@ spec:
           type: "apisix-standalone"
         kubernetes:
           ingressClass: "devops-apisix"
+        controllerName: apisix.apache.org/apisix-devops-controller
+        leaderElection:
+          id: "apisix-devops-controller-leader"
       apisix:
         adminService:
           namespace: ingress-devops
