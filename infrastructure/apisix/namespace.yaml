@@ -3,4 +3,5 @@ kind: Namespace
 metadata:
   name: ingress-devops
   labels:
+    app.kubernetes.io/part-of: leptostack
     pod-security.kubernetes.io/enforce: restricted
