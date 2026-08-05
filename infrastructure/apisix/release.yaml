@@ -57,6 +57,7 @@ spec:
       apisix:
         adminService:
           namespace: ingress-devops
+          name: apisix-devops-admin
       gatewayProxy:
         createDefault: true
       deployment:
