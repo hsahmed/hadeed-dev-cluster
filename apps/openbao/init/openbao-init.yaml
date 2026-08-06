@@ -3,13 +3,13 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: openbao-init
-  namespace: ${cluster_name}-openbao
+  namespace: devops-openbao
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: openbao-init
-  namespace: ${cluster_name}-openbao
+  namespace: devops-openbao
 rules:
   - apiGroups: [""]
     resources: ["secrets"]
@@ -19,7 +19,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: openbao-init
-  namespace: ${cluster_name}-openbao
+  namespace: devops-openbao
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -27,13 +27,13 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: openbao-init
-    namespace: ${cluster_name}-openbao
+    namespace: devops-openbao
 ---
 apiVersion: batch/v1
 kind: Job
 metadata:
   name: openbao-init
-  namespace: ${cluster_name}-openbao
+  namespace: devops-openbao
 spec:
   template:
     spec:
@@ -62,9 +62,9 @@ spec:
               mountPath: /tmp
           env:
             - name: BAO_ADDR
-              value: "http://${cluster_name}-openbao-openbao.${cluster_name}-openbao.svc.cluster.local:8200"
+              value: "http://devops-openbao-openbao.devops-openbao.svc.cluster.local:8200"
             - name: NAMESPACE
-              value: "${cluster_name}-openbao"
+              value: "devops-openbao"
           command:
             - sh
             - -c

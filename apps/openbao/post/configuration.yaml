@@ -3,23 +3,23 @@ apiVersion: vault.m.upbound.io/v1beta1
 kind: ProviderConfig
 metadata:
   name: openbao
-  namespace: ${cluster_name}-openbao
+  namespace: devops-openbao
 spec:
-  address: "http://${cluster_name}-openbao-openbao.${cluster_name}-openbao.svc.cluster.local:8200"
+  address: "http://devops-openbao-openbao.devops-openbao.svc.cluster.local:8200"
   skip_tls_verify: true
   skip_child_token: true
   credentials:
     source: Secret
     secretRef:
       name: openbao-init
-      namespace: ${cluster_name}-openbao
+      namespace: devops-openbao
       key: credentials
 ---
 apiVersion: auth.vault.m.upbound.io/v1alpha1
 kind: Backend
 metadata:
   name: kubernetes
-  namespace: ${cluster_name}-openbao
+  namespace: devops-openbao
 spec:
   providerConfigRef:
     name: openbao
@@ -31,7 +31,7 @@ apiVersion: vault.vault.m.upbound.io/v1alpha1
 kind: Mount
 metadata:
   name: k8s
-  namespace: ${cluster_name}-openbao
+  namespace: devops-openbao
 spec:
   providerConfigRef:
     name: openbao
@@ -44,7 +44,7 @@ apiVersion: vault.vault.m.upbound.io/v1alpha1
 kind: Policy
 metadata:
   name: eso-k8s
-  namespace: ${cluster_name}-openbao
+  namespace: devops-openbao
 spec:
   providerConfigRef:
     name: openbao
@@ -63,7 +63,7 @@ apiVersion: kubernetes.vault.m.upbound.io/v1alpha1
 kind: AuthBackendConfig
 metadata:
   name: kubernetes
-  namespace: ${cluster_name}-openbao
+  namespace: devops-openbao
 spec:
   providerConfigRef:
     name: openbao
@@ -77,7 +77,7 @@ apiVersion: kubernetes.vault.m.upbound.io/v1alpha1
 kind: AuthBackendRole
 metadata:
   name: eso-k8s
-  namespace: ${cluster_name}-openbao
+  namespace: devops-openbao
 spec:
   providerConfigRef:
     name: openbao

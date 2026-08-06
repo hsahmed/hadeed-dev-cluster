@@ -2,9 +2,9 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: openbao
-  namespace: ${cluster_name}-openbao
+  namespace: devops-openbao
 spec:
-  targetNamespace: ${cluster_name}-openbao
+  targetNamespace: devops-openbao
   interval: 1h
   chart:
     spec:
@@ -29,7 +29,7 @@ spec:
       extraSecretEnvironmentVars:
         - envName: OPENBAO_UNSEAL_KEY
           secretName: openbao-key
-          secretKey: openbao_unseal_key
+          secretKey: password
       standalone:
         config: |
           ui = true
@@ -48,6 +48,6 @@ spec:
           }
 
           seal "static" {
-            current_key_id = "${leptostack_name}-openbao-key"
+            current_key_id = "devops-openbao-key"
             current_key = "env://OPENBAO_UNSEAL_KEY"
           }

@@ -1,8 +1,17 @@
-apiVersion: v1
-kind: Secret
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
 metadata:
-  name: openbao-key
-  namespace: ${cluster_name}-openbao
-type: Opaque
-data:
-  openbao_unseal_key: ZkFmdjN5dXZtd0psS0s2ZStxWjlvNnIrVjNUMnc4Z2pPNmdzTEZMSy9RTT0=
+  name: "openbao-unseal-key"
+  namespace: devops-openbao
+spec:
+  refreshInterval: "0"
+  refreshPolicy: CreatedOnce
+  target:
+    name: openbao-key
+  dataFrom:
+  - sourceRef:
+      generatorRef:
+        apiVersion: generators.external-secrets.io/v1alpha1
+        kind: ClusterGenerator
+        name: "password-generator"
