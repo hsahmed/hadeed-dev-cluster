@@ -255,6 +255,19 @@ spec:
     substituteFrom:
       - kind: ConfigMap
         name: leptostack-config
+  patches:
+    - target:
+        group: rbac.authorization.k8s.io
+        version: v1
+        kind: ClusterRoleBinding # or ClusterRoleBinding
+        name: keycloak-operator-clusterrole-binding
+      patch: |
+        - op: add
+          path: /subjects/-
+          value:
+            kind: ServiceAccount
+            name: keycloak-operator
+            namespace: devops-keycloak
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
