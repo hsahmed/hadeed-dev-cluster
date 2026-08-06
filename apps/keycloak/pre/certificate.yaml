@@ -1,15 +1,15 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: ${leptostack_name}-sso-tls
-  namespace: ${cluster_name}-keycloak
+  name: devops-sso-tls
+  namespace: devops-keycloak
 spec:
-  secretName: ${leptostack_name}-sso-tls
+  secretName: devops-sso-tls
   issuerRef:
     name: internal-issuer
     kind: ClusterIssuer
     group: cert-manager.io
   dnsNames:
-    - ${leptostack_name}-sso-admin.${leptostack_domain}
-    - ${leptostack_name}-sso.${leptostack_domain}
-    - ${leptostack_name}-sso-service.${cluster_name}-keycloak.svc.cluster.local
+    - sso-admin.hadeed.dev
+    - sso.hadeed.dev
+    - devops-sso-service.devops-keycloak.svc.cluster.local
