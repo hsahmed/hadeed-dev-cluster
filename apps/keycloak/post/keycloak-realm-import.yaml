@@ -1,14 +1,14 @@
 apiVersion: k8s.keycloak.org/v2beta1
 kind: KeycloakRealmImport
 metadata:
-  name: ${leptostack_name}-realm
-  namespace: ${cluster_name}-keycloak
+  name: devops-realm
+  namespace: devops-keycloak
 spec:
-  keycloakCRName: ${leptostack_name}-sso
+  keycloakCRName: devops-sso
   realm:
     id: 8fa921f4-3725-443a-8288-40abf640dab5
-    realm: ${leptostack_name}
-    displayName: LeptoStack ${leptostack_name}
+    realm: devops
+    displayName: Hadeed devops
     displayNameHtml: ""
     notBefore: 0
     defaultSignatureAlgorithm: RS256
@@ -1211,9 +1211,9 @@ spec:
       ssl: "false"
       timeout: "10000"
       host: smtp.greenmail.svc.cluster.local
-      replyTo: support@${leptostack_domain}
-      from: no-reply@${leptostack_domain}
-      fromDisplayName: LeptoStack SSO
+      replyTo: support@hadeed.dev
+      from: no-reply@hadeed.dev
+      fromDisplayName: Hadeed DevOps SSO
       connectionTimeout: "10000"
     loginTheme: ""
     accountTheme: ""

@@ -3,7 +3,7 @@ apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: "keycloak-admin-secret"
-  namespace: ${cluster_name}-keycloak
+  namespace: devops-keycloak
 spec:
   refreshInterval: "0"
   refreshPolicy: CreatedOnce
@@ -26,18 +26,18 @@ apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret
 metadata:
   name: "keycloak-admin-push-secret"
-  namespace: ${cluster_name}-keycloak
+  namespace: devops-keycloak
 spec:
   refreshInterval: "0"
   secretStoreRefs:
-  - name: ${cluster_name}-bao
+  - name: devops-bao
     kind: ClusterSecretStore
   selector:
     secret:
       name: keycloak-admin
   dataTo:
     - storeRef:
-        name: ${cluster_name}-bao
+        name: devops-bao
         kind: ClusterSecretStore
       remoteKey: dynamic/keycloak/keycloak-admin
 ---
@@ -45,7 +45,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: keycloak-create-admin
-  namespace: ${cluster_name}-keycloak
+  namespace: devops-keycloak
 spec:
   template:
     spec:
@@ -70,7 +70,7 @@ spec:
         - -c
         - |
           KCADM="/opt/keycloak/bin/kcadm.sh"
-          SERVER="https://${leptostack_name}-sso-service.${cluster_name}-keycloak.svc.cluster.local:8443"
+          SERVER="https://devops-sso-service.devops-keycloak.svc.cluster.local:8443"
           MAX_RETRIES=30
           RETRY_DELAY=10
 
@@ -112,7 +112,7 @@ spec:
             if ! USER_ID=$($KCADM create users \
               -r master \
               -s username="$KC_NEW_ADMIN_USER" \
-              -s email="$KC_NEW_ADMIN_USER@${leptostack_domain}" \
+              -s email="$KC_NEW_ADMIN_USER@hadeed.com.sa" \
               -s firstName=Keycloak \
               -s lastName=Admin \
               -s enabled=true \
@@ -174,12 +174,12 @@ spec:
         - name: KC_CLI_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: ${leptostack_name}-sso-initial-admin
+              name: devops-sso-initial-admin
               key: password
         - name: KC_INITIAL_ADMIN_USER
           valueFrom:
             secretKeyRef:
-              name: ${leptostack_name}-sso-initial-admin
+              name: devops-sso-initial-admin
               key: username
         - name: KC_CLI_TRUSTSTORE_PASSWORD
           value: changeit

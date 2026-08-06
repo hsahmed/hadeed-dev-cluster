@@ -4,5 +4,4 @@ resources:
   - supabase-components.yaml
   - secrets.yaml
   - certificate.yaml
-  - custom-resources.yaml
   - operator.yaml

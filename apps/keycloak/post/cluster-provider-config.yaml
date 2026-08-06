@@ -3,11 +3,11 @@ apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret
 metadata:
   name: internal-ca-push-secret
-  namespace: ${cluster_name}-keycloak
+  namespace: devops-keycloak
 spec:
   refreshInterval: "0"
   secretStoreRefs:
-  - name: ${cluster_name}-bao
+  - name: devops-bao
     kind: ClusterSecretStore
   selector:
     secret:
@@ -23,11 +23,11 @@ apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: keycloak-provider-credentials
-  namespace: ${cluster_name}-keycloak
+  namespace: devops-keycloak
 spec:
   refreshInterval: "0"
   secretStoreRef:
-    name: ${cluster_name}-bao
+    name: devops-bao
     kind: ClusterSecretStore
   target:
     name: keycloak-provider-credentials
@@ -37,7 +37,7 @@ spec:
         credentials: |
           {
             "client_id": "admin-cli",
-            "url": "https://${leptostack_name}-sso-service.${cluster_name}-keycloak.svc.cluster.local:8443",
+            "url": "https://devops-sso-service.devops-keycloak.svc.cluster.local:8443",
             "username": "keycloak-admin",
             "password": {{ .password | toJson }},
             "root_ca_certificate": {{ .cert | toJson }}
@@ -55,8 +55,8 @@ spec:
 apiVersion: keycloak.m.crossplane.io/v1beta1
 kind: ProviderConfig
 metadata:
-  name: ${cluster_name}-keycloak
-  namespace: ${cluster_name}-keycloak
+  name: devops-keycloak
+  namespace: devops-keycloak
 spec:
   credentialsSecretRef:
     key: credentials

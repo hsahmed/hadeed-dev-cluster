@@ -4,4 +4,4 @@ resources:
   - cluster-provider-config.yaml
   - keycloak-realm-import.yaml
   - create-admin.yaml
-  - leptostack-admin.yaml
+  - devops-admin.yaml

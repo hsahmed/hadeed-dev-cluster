@@ -2,18 +2,18 @@
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
-  name: "leptostack-admin-secret"
-  namespace: ${cluster_name}-keycloak
+  name: "devops-admin-secret"
+  namespace: devops-keycloak
 spec:
   refreshInterval: "0"
   refreshPolicy: CreatedOnce
   target:
-    name: leptostack-admin
+    name: devops-admin
     template:
       engineVersion: v2
       mergePolicy: Replace
       data:
-        username: ${leptostack_name}-admin
+        username: devops-admin
         password: "{{ .password }}"
   dataFrom:
   - sourceRef:
@@ -25,72 +25,72 @@ spec:
 apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret
 metadata:
-  name: "leptostack-admin-push-secret"
-  namespace: ${cluster_name}-keycloak
+  name: "devops-admin-push-secret"
+  namespace: devops-keycloak
 spec:
   refreshInterval: "0"
   secretStoreRefs:
-  - name: ${cluster_name}-bao
+  - name: devops-bao
     kind: ClusterSecretStore
   selector:
     secret:
-      name: leptostack-admin
+      name: devops-admin
   dataTo:
     - storeRef:
-        name: ${cluster_name}-bao
+        name: devops-bao
         kind: ClusterSecretStore
-      remoteKey: dynamic/keycloak/leptostack-admin
+      remoteKey: dynamic/keycloak/devops-admin
 ---
 apiVersion: user.keycloak.m.crossplane.io/v1alpha1
 kind: User
 metadata:
-  name: ${leptostack_name}-admin
-  namespace: ${cluster_name}-keycloak
+  name: devops-admin
+  namespace: devops-keycloak
 spec:
   providerConfigRef:
     kind: ProviderConfig
-    name: ${cluster_name}-keycloak
+    name: devops-keycloak
   forProvider:
-    realmId: ${leptostack_name}
-    username: ${leptostack_name}-admin
-    email: ${leptostack_name}-admin@${leptostack_domain}
-    firstName: LeptoStack
+    realmId: devops
+    username: devops-admin
+    email: devops-admin@hadeed.com.sa
+    firstName: devops
     lastName: Admin
     emailVerified: true
     enabled: true
     initialPassword:
       - valueSecretRef:
-          name: leptostack-admin
+          name: devops-admin
           key: password
         temporary: false
 ---
 apiVersion: group.keycloak.m.crossplane.io/v1alpha1
 kind: Group
 metadata:
-  name: leptostack-admins
-  namespace: ${cluster_name}-keycloak
+  name: devops-admins
+  namespace: devops-keycloak
 spec:
   providerConfigRef:
     kind: ProviderConfig
-    name: ${cluster_name}-keycloak
+    name: devops-keycloak
   forProvider:
-    realmId: ${leptostack_name}
-    name: leptostack-admins
-    description: "LeptoStack Administrators"
+    realmId: devops
+    name: devops-admins
+    description: "DevOps Administrators"
 ---
 apiVersion: group.keycloak.m.crossplane.io/v1alpha1
 kind: Roles
 metadata:
-  name: leptostack-admins-roles
-  namespace: ${cluster_name}-keycloak
+  name: devops-admins-roles
+  namespace: devops-keycloak
 spec:
   providerConfigRef:
     kind: ProviderConfig
-    name: ${cluster_name}-keycloak
+    name: devops-keycloak
   forProvider:
-    realmId: ${leptostack_name}
+    realmId: devops
     groupIdRef:
-      name: leptostack-admins
+      name: devops-admins
     exhaustive: false
     roleIds:
       - db06501b-5427-46aa-9b79-e3c800beedf8  # realm-admin from realm-management client
@@ -98,16 +98,16 @@ spec:
 apiVersion: user.keycloak.m.crossplane.io/v1alpha1
 kind: Groups
 metadata:
-  name: ${leptostack_name}-admin-groups
-  namespace: ${cluster_name}-keycloak
+  name: devops-admin-groups
+  namespace: devops-keycloak
 spec:
   providerConfigRef:
     kind: ProviderConfig
-    name: ${cluster_name}-keycloak
+    name: devops-keycloak
   forProvider:
-    realmId: ${leptostack_name}
+    realmId: devops
     exhaustive: false
     userIdRef:
-      name: ${leptostack_name}-admin
+      name: devops-admin
     groupIdsRefs:
-      - name: leptostack-admins
+      - name: devops-admins
