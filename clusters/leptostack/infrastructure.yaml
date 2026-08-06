@@ -153,3 +153,21 @@ spec:
   prune: false
   wait: true
   timeout: 10m
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: devops-apisix-post
+  namespace: flux-system
+spec:
+  interval: 720m0s
+  dependsOn:
+    - name: devops-apisix
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  serviceAccountName: kustomize-controller
+  path: ./infrastructure/apisix/post
+  prune: false
+  wait: true
+  timeout: 10m

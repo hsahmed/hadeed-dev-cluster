@@ -14,7 +14,7 @@ spec:
     - git.hadeed.dev
     - sso.hadeed.dev
     - git-new.hadeed.dev
-    - apisix-ingress-controller.ingress-devops.svc.cluster.local
+    - apisix-devops-ingress-controller.ingress-devops.svc.cluster.local
 ---
 apiVersion: apisix.apache.org/v2
 kind: ApisixTls
@@ -27,7 +27,7 @@ spec:
     - git.hadeed.dev
     - sso.hadeed.dev
     - git-new.hadeed.dev
-    - apisix-ingress-controller.ingress-devops.svc.cluster.local
+    - apisix-devops-ingress-controller.ingress-devops.svc.cluster.local
   secret:
     name: devops-tls
     namespace: ingress-devops
