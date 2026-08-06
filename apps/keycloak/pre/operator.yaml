@@ -212,21 +212,6 @@ subjects:
   name: keycloak-operator
   namespace: devops-keycloak
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  labels:
-    app.kubernetes.io/name: keycloak-operator
-  name: keycloak-operator-clusterrole-binding
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: keycloak-operator-clusterrole
-subjects:
-- kind: ServiceAccount
-  name: keycloak-operator
-  namespace: devops-keycloak
----
 apiVersion: v1
 kind: Service
 metadata:
