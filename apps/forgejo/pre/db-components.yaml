@@ -1,0 +1,74 @@
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: "forgejo-db"
+  namespace: devops-db
+spec:
+  refreshInterval: "0"
+  refreshPolicy: CreatedOnce
+  target:
+    name: forgejo-db
+    template:
+      engineVersion: v2
+      mergePolicy: Replace
+      data:
+        host: devops-db-rw.devops-db.svc.cluster.local
+        port: "5432"
+        database: forgejo
+        username: forgejo
+        password: "{{ .password }}"
+  dataFrom:
+  - sourceRef:
+      generatorRef:
+        apiVersion: generators.external-secrets.io/v1alpha1
+        kind: ClusterGenerator
+        name: "password-generator"
+---
+apiVersion: external-secrets.io/v1alpha1
+kind: PushSecret
+metadata:
+  name: "forgejo-db"
+  namespace: devops-db
+spec:
+  refreshInterval: "0"
+  secretStoreRefs:
+  - name: devops-bao
+    kind: ClusterSecretStore
+  selector:
+    secret:
+      name: forgejo-db
+  data:
+  - match:
+      secretKey: password
+      remoteRef:
+        remoteKey: dynamic/forgejo/forgejo-db
+        property: password
+---
+apiVersion: postgresql.sql.m.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: forgejo
+  namespace: devops-db
+spec:
+  providerConfigRef:
+    kind: ProviderConfig
+    name: devops-postgresql
+  forProvider:
+    privileges:
+      login: true
+    passwordSecretRef:
+      name: forgejo-db
+      key: password
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: supabase-cluster-keycloak
+  namespace: devops-db
+spec:
+  name: forgejo
+  owner: forgejo
+  databaseReclaimPolicy: retain
+  cluster:
+    name: devops-db

@@ -1,8 +1,0 @@
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-resources:
-  - leptostack-config.yaml
-  - cluster-config.yaml
-  - infrastructure.yaml
-  - leptostack-base.yaml
-  # - leptostack-modules.yaml # Uncomment to enable LeptoStack modules

@@ -1,0 +1,57 @@
+apiVersion: external-secrets.io/v1alpha1
+kind: PushSecret
+metadata:
+  name: devops-db-superuser
+  namespace: devops-db
+spec:
+  refreshInterval: "0"
+  secretStoreRefs:
+  - name: devops-bao
+    kind: ClusterSecretStore
+  selector:
+    secret:
+      name: devops-db-superuser
+  data:
+  - match:
+      secretKey: password
+      remoteRef:
+        remoteKey: dynamic/devops-db/superuser
+        property: password
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: devops-db-provider
+  namespace: devops-db
+spec:
+  refreshInterval: "0"
+  secretStoreRef:
+    name: devops-bao
+    kind: ClusterSecretStore
+  target:
+    name: devops-db-provider
+    template:
+      engineVersion: v2
+      mergePolicy: Merge
+      data:
+        endpoint: devops-db-rw.devops-db.svc.cluster.local
+        port: "5432"
+        username: postgres
+        password: "{{ .password }}"
+  data:
+  - secretKey: password
+    remoteRef:
+      key: dynamic/devops-db/superuser
+      property: password
+---
+apiVersion: postgresql.sql.m.crossplane.io/v1alpha1
+kind: ProviderConfig
+metadata:
+  name: devops-postgresql
+  namespace: devops-db
+spec:
+  sslMode: disable
+  credentials:
+    source: PostgreSQLConnectionSecret
+    connectionSecretRef:
+      name: devops-db-provider

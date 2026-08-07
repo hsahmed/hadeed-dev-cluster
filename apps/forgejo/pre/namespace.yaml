@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devops-forgejo
+  labels:
+    app.kubernetes.io/part-of: leptostack
+    pod-security.kubernetes.io/enforce: restricted
