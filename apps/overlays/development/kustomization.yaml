@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base/leptostack
+
+patches:
+  - target:
+      kind: ConfigMap
+      name: leptostack-config
+      namespace: flux-system
+    patch: |-
+      - op: replace
+        path: /data/cluster_name
+        value: dev
+      - op: replace
+        path: /data/leptostack_domain
+        value: hadeed.dev
+      - op: replace
+        path: /data/leptostack_name
+        value: portal-dev

@@ -1,0 +1,157 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cert-manager
+  namespace: flux-system
+spec:
+  interval: 720m0s
+  sourceRef:
+    kind: GitRepository
+    name: leptostack-base
+  serviceAccountName: kustomize-controller
+  path: ./infrastructure/cert-manager
+  prune: true
+  wait: true
+  timeout: 10m
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: trust-manager
+  namespace: flux-system
+spec:
+  interval: 720m0s
+  dependsOn:
+    - name: cert-manager
+  sourceRef:
+    kind: GitRepository
+    name: leptostack-base
+  serviceAccountName: kustomize-controller
+  path: ./infrastructure/trust-manager
+  prune: true
+  wait: true
+  timeout: 10m
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: external-secrets
+  namespace: flux-system
+spec:
+  interval: 720m0s
+  sourceRef:
+    kind: GitRepository
+    name: leptostack-base
+  serviceAccountName: kustomize-controller
+  path: ./infrastructure/external-secrets
+  prune: true
+  wait: false
+  timeout: 10m
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: crossplane
+  namespace: flux-system
+spec:
+  interval: 720m0s
+  sourceRef:
+    kind: GitRepository
+    name: leptostack-base
+  serviceAccountName: kustomize-controller
+  path: ./infrastructure/crossplane
+  prune: true
+  wait: true
+  timeout: 10m
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: crossplane-post
+  namespace: flux-system
+spec:
+  interval: 720m0s
+  dependsOn:
+    - name: crossplane
+  sourceRef:
+    kind: GitRepository
+    name: leptostack-base
+  serviceAccountName: kustomize-controller
+  path: ./infrastructure/crossplane/post
+  prune: true
+  wait: true
+  timeout: 10m
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: operators
+  namespace: flux-system
+spec:
+  interval: 720m0s
+  dependsOn:
+    - name: cert-manager
+  sourceRef:
+    kind: GitRepository
+    name: leptostack-base
+  serviceAccountName: kustomize-controller
+  path: ./infrastructure/operators
+  prune: true
+  wait: false
+  timeout: 10m
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: infra-config
+  namespace: flux-system
+spec:
+  interval: 720m0s
+  timeout: 10m
+  dependsOn:
+    - name: cert-manager
+    - name: trust-manager
+    - name: external-secrets
+    - name: crossplane
+    - name: operators
+  sourceRef:
+    kind: GitRepository
+    name: leptostack-base
+  path: ./infrastructure/config
+  prune: true
+  wait: true
+  commonMetadata:
+    labels:
+      app.kubernetes.io/part-of: leptostack
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: keycloak-crd
+  namespace: flux-system
+spec:
+  interval: 720m0s
+  timeout: 10m
+  sourceRef:
+    kind: GitRepository
+    name: leptostack-base
+  path: ./infrastructure/keycloak-crd
+  prune: true
+  wait: true
+  patches:
+    - target:
+        group: rbac.authorization.k8s.io
+        version: v1
+        kind: ClusterRoleBinding
+        name: keycloak-operator-clusterrole-binding
+      patch: |
+        - op: add
+          path: "/subjects"
+          value:
+            - kind: ServiceAccount
+              name: keycloak-operator
+              namespace: ${cluster_name}-keycloak
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: leptostack-config
