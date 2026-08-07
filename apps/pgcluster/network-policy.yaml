@@ -7,6 +7,8 @@ metadata:
   podSelector:
     matchLabels:
       cnpg.io/cluster: devops-db
+  policyTypes:
+    - Ingress
   ingress:
     - from:
         - namespaceSelector:
