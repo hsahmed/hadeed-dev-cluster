@@ -4,6 +4,7 @@ kind: NetworkPolicy
 metadata:
   name: allow-cnpg-operator
   namespace: devops-db
+spec:
   podSelector:
     matchLabels:
       cnpg.io/cluster: devops-db
