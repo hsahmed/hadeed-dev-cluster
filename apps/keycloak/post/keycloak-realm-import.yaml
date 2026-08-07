@@ -58,21 +58,21 @@ spec:
       realm:
         - id: dea1b0e2-3779-4a71-9a54-4ad93028cea2
           name: uma_authorization
-          description: $${role_uma_authorization}
+          description: ${role_uma_authorization}
           composite: false
           clientRole: false
           containerId: 8fa921f4-3725-443a-8288-40abf640dab5
           attributes: {}
         - id: 67d9ef1e-b269-46c8-8f4f-bc5d3ae9ba74
           name: offline_access
-          description: $${role_offline-access}
+          description: ${role_offline-access}
           composite: false
           clientRole: false
           containerId: 8fa921f4-3725-443a-8288-40abf640dab5
           attributes: {}
         - id: fc76f1c6-2a4b-45b0-8140-882ad234708c
           name: default-roles-local
-          description: $${role_default-roles}
+          description: ${role_default-roles}
           composite: true
           composites:
             realm:
@@ -89,35 +89,35 @@ spec:
         realm-management:
           - id: 1f6f0561-4755-4793-a700-69872f88bdc2
             name: manage-clients
-            description: $${role_manage-clients}
+            description: ${role_manage-clients}
             composite: false
             clientRole: true
             containerId: c24162fe-f49d-44cc-93e9-037fc3ecd399
             attributes: {}
           - id: 16b3e69b-bc3d-403a-8aa9-12dd9d895b73
             name: query-users
-            description: $${role_query-users}
+            description: ${role_query-users}
             composite: false
             clientRole: true
             containerId: c24162fe-f49d-44cc-93e9-037fc3ecd399
             attributes: {}
           - id: b903af96-0dce-45de-9784-7a78b9caab47
             name: view-events
-            description: $${role_view-events}
+            description: ${role_view-events}
             composite: false
             clientRole: true
             containerId: c24162fe-f49d-44cc-93e9-037fc3ecd399
             attributes: {}
           - id: 364b198a-4381-4a23-a762-8b8843521056
             name: view-identity-providers
-            description: $${role_view-identity-providers}
+            description: ${role_view-identity-providers}
             composite: false
             clientRole: true
             containerId: c24162fe-f49d-44cc-93e9-037fc3ecd399
             attributes: {}
           - id: db06501b-5427-46aa-9b79-e3c800beedf8
             name: realm-admin
-            description: $${role_realm-admin}
+            description: ${role_realm-admin}
             composite: true
             composites:
               client:
@@ -145,28 +145,28 @@ spec:
             attributes: {}
           - id: 0d05fc53-295a-46c1-a434-95796d8b3a65
             name: query-groups
-            description: $${role_query-groups}
+            description: ${role_query-groups}
             composite: false
             clientRole: true
             containerId: c24162fe-f49d-44cc-93e9-037fc3ecd399
             attributes: {}
           - id: 991eba2b-61bb-477e-b2af-d02f3a62bb1f
             name: view-realm
-            description: $${role_view-realm}
+            description: ${role_view-realm}
             composite: false
             clientRole: true
             containerId: c24162fe-f49d-44cc-93e9-037fc3ecd399
             attributes: {}
           - id: d734b218-f384-4701-b71d-20d77e9bd6a9
             name: manage-authorization
-            description: $${role_manage-authorization}
+            description: ${role_manage-authorization}
             composite: false
             clientRole: true
             containerId: c24162fe-f49d-44cc-93e9-037fc3ecd399
             attributes: {}
           - id: e6e45513-a5d8-410d-a1b9-b62f53ed59ab
             name: view-users
-            description: $${role_view-users}
+            description: ${role_view-users}
             composite: true
             composites:
               client:
@@ -178,28 +178,28 @@ spec:
             attributes: {}
           - id: fbbc1f96-a267-45eb-b44e-dcb5043e4d81
             name: query-realms
-            description: $${role_query-realms}
+            description: ${role_query-realms}
             composite: false
             clientRole: true
             containerId: c24162fe-f49d-44cc-93e9-037fc3ecd399
             attributes: {}
           - id: eab62eaf-a644-4a05-b1d3-b5cf96d5e9b2
             name: manage-identity-providers
-            description: $${role_manage-identity-providers}
+            description: ${role_manage-identity-providers}
             composite: false
             clientRole: true
             containerId: c24162fe-f49d-44cc-93e9-037fc3ecd399
             attributes: {}
           - id: 7605ac7f-5e3b-44ee-a438-98ce297883ee
             name: query-clients
-            description: $${role_query-clients}
+            description: ${role_query-clients}
             composite: false
             clientRole: true
             containerId: c24162fe-f49d-44cc-93e9-037fc3ecd399
             attributes: {}
           - id: 4a26e46b-7171-465b-a5af-17dfc66a2272
             name: view-clients
-            description: $${role_view-clients}
+            description: ${role_view-clients}
             composite: true
             composites:
               client:
@@ -210,42 +210,42 @@ spec:
             attributes: {}
           - id: bd2fcab7-315b-40e1-ba31-883f7cfd0448
             name: view-authorization
-            description: $${role_view-authorization}
+            description: ${role_view-authorization}
             composite: false
             clientRole: true
             containerId: c24162fe-f49d-44cc-93e9-037fc3ecd399
             attributes: {}
           - id: 1fbd38cd-41de-4a6d-ac33-d8d139cdd5ba
             name: manage-users
-            description: $${role_manage-users}
+            description: ${role_manage-users}
             composite: false
             clientRole: true
             containerId: c24162fe-f49d-44cc-93e9-037fc3ecd399
             attributes: {}
           - id: 888842cd-dfe1-4ca7-8930-fd8a3694c2d7
             name: manage-events
-            description: $${role_manage-events}
+            description: ${role_manage-events}
             composite: false
             clientRole: true
             containerId: c24162fe-f49d-44cc-93e9-037fc3ecd399
             attributes: {}
           - id: 8bedf639-2aaa-4849-b2f3-acd3be4127c0
             name: create-client
-            description: $${role_create-client}
+            description: ${role_create-client}
             composite: false
             clientRole: true
             containerId: c24162fe-f49d-44cc-93e9-037fc3ecd399
             attributes: {}
           - id: 03784795-bef2-429e-aab6-c3936ee37391
             name: impersonation
-            description: $${role_impersonation}
+            description: ${role_impersonation}
             composite: false
             clientRole: true
             containerId: c24162fe-f49d-44cc-93e9-037fc3ecd399
             attributes: {}
           - id: f8769a82-4ac9-447f-9b58-44d4fcc54a1d
             name: manage-realm
-            description: $${role_manage-realm}
+            description: ${role_manage-realm}
             composite: false
             clientRole: true
             containerId: c24162fe-f49d-44cc-93e9-037fc3ecd399
@@ -256,7 +256,7 @@ spec:
         broker:
           - id: 04d88994-d6b9-4ef9-9f7c-e95a73d513eb
             name: read-token
-            description: $${role_read-token}
+            description: ${role_read-token}
             composite: false
             clientRole: true
             containerId: 7509f37d-f9c9-4d4e-9c12-3d4efd4562ca
@@ -264,14 +264,14 @@ spec:
         account:
           - id: d59ef994-5d5d-417b-bc99-026403c625b1
             name: view-profile
-            description: $${role_view-profile}
+            description: ${role_view-profile}
             composite: false
             clientRole: true
             containerId: 28e8c7f8-528f-44a5-9f45-acb4f5fef309
             attributes: {}
           - id: d56d6643-2d8d-4c16-a0a8-41c59f4a0aae
             name: manage-account
-            description: $${role_manage-account}
+            description: ${role_manage-account}
             composite: true
             composites:
               client:
@@ -282,21 +282,21 @@ spec:
             attributes: {}
           - id: 692f3b67-3418-400d-b275-c9c273f5634d
             name: view-consent
-            description: $${role_view-consent}
+            description: ${role_view-consent}
             composite: false
             clientRole: true
             containerId: 28e8c7f8-528f-44a5-9f45-acb4f5fef309
             attributes: {}
           - id: f596fe35-087a-4cf2-87a2-299148bbf2a3
             name: view-groups
-            description: $${role_view-groups}
+            description: ${role_view-groups}
             composite: false
             clientRole: true
             containerId: 28e8c7f8-528f-44a5-9f45-acb4f5fef309
             attributes: {}
           - id: 4534acbb-a040-42cd-aa8b-11879f134398
             name: manage-consent
-            description: $${role_manage-consent}
+            description: ${role_manage-consent}
             composite: true
             composites:
               client:
@@ -307,21 +307,21 @@ spec:
             attributes: {}
           - id: e769cc47-83f5-4241-9d55-cab6653cd118
             name: manage-account-links
-            description: $${role_manage-account-links}
+            description: ${role_manage-account-links}
             composite: false
             clientRole: true
             containerId: 28e8c7f8-528f-44a5-9f45-acb4f5fef309
             attributes: {}
           - id: 2f1f1caf-6224-4f20-af3f-5b9ec7923c8d
             name: delete-account
-            description: $${role_delete-account}
+            description: ${role_delete-account}
             composite: false
             clientRole: true
             containerId: 28e8c7f8-528f-44a5-9f45-acb4f5fef309
             attributes: {}
           - id: 6a8cbada-177e-4cf9-a14f-1e5b7edcb77b
             name: view-applications
-            description: $${role_view-applications}
+            description: ${role_view-applications}
             composite: false
             clientRole: true
             containerId: 28e8c7f8-528f-44a5-9f45-acb4f5fef309
@@ -329,7 +329,7 @@ spec:
     defaultRole:
       id: fc76f1c6-2a4b-45b0-8140-882ad234708c
       name: default-roles-local
-      description: $${role_default-roles}
+      description: ${role_default-roles}
       composite: true
       clientRole: false
       containerId: 8fa921f4-3725-443a-8288-40abf640dab5
@@ -386,8 +386,8 @@ spec:
     clients:
       - id: 28e8c7f8-528f-44a5-9f45-acb4f5fef309
         clientId: account
-        name: $${client_account}
-        rootUrl: $${authBaseUrl}
+        name: ${client_account}
+        rootUrl: ${authBaseUrl}
         baseUrl: /realms/local/account/
         surrogateAuthRequired: false
         enabled: true
@@ -427,8 +427,8 @@ spec:
           - microprofile-jwt
       - id: 881bbbb6-38f9-4e55-925c-80a1d0d42547
         clientId: account-console
-        name: $${client_account-console}
-        rootUrl: $${authBaseUrl}
+        name: ${client_account-console}
+        rootUrl: ${authBaseUrl}
         baseUrl: /realms/local/account/
         surrogateAuthRequired: false
         enabled: true
@@ -476,7 +476,7 @@ spec:
           - microprofile-jwt
       - id: a9f16b77-a428-4334-8c86-ec37d9495a78
         clientId: admin-cli
-        name: $${client_admin-cli}
+        name: ${client_admin-cli}
         surrogateAuthRequired: false
         enabled: true
         alwaysDisplayInConsole: false
@@ -515,7 +515,7 @@ spec:
           - microprofile-jwt
       - id: 7509f37d-f9c9-4d4e-9c12-3d4efd4562ca
         clientId: broker
-        name: $${client_broker}
+        name: ${client_broker}
         surrogateAuthRequired: false
         enabled: true
         alwaysDisplayInConsole: false
@@ -553,7 +553,7 @@ spec:
           - microprofile-jwt
       - id: c24162fe-f49d-44cc-93e9-037fc3ecd399
         clientId: realm-management
-        name: $${client_realm-management}
+        name: ${client_realm-management}
         surrogateAuthRequired: false
         enabled: true
         alwaysDisplayInConsole: false
@@ -591,8 +591,8 @@ spec:
           - microprofile-jwt
       - id: 50ad10c0-f169-4c0e-a2f9-d8ac160b0bf1
         clientId: security-admin-console
-        name: $${client_security-admin-console}
-        rootUrl: $${authAdminUrl}
+        name: ${client_security-admin-console}
+        rootUrl: ${authAdminUrl}
         baseUrl: /admin/local/console/
         surrogateAuthRequired: false
         enabled: true
@@ -653,7 +653,7 @@ spec:
         description: SAML role list
         protocol: saml
         attributes:
-          consent.screen.text: $${samlRoleListScopeConsentText}
+          consent.screen.text: ${samlRoleListScopeConsentText}
           display.on.consent.screen: "true"
         protocolMappers:
           - id: a6482a77-5535-43f9-ace1-a6d680fc58d5
@@ -684,7 +684,7 @@ spec:
         protocol: openid-connect
         attributes:
           include.in.token.scope: "true"
-          consent.screen.text: $${addressScopeConsentText}
+          consent.screen.text: ${addressScopeConsentText}
           display.on.consent.screen: "true"
         protocolMappers:
           - id: 5b858b61-df99-441a-9744-a62a290c54f0
@@ -709,7 +709,7 @@ spec:
         protocol: openid-connect
         attributes:
           include.in.token.scope: "true"
-          consent.screen.text: $${organizationScopeConsentText}
+          consent.screen.text: ${organizationScopeConsentText}
           display.on.consent.screen: "true"
         protocolMappers:
           - id: bec6bd6b-657c-4051-8fcf-e02455c24a21
@@ -748,7 +748,7 @@ spec:
         description: 'OpenID Connect built-in scope: offline_access'
         protocol: openid-connect
         attributes:
-          consent.screen.text: $${offlineAccessScopeConsentText}
+          consent.screen.text: ${offlineAccessScopeConsentText}
           display.on.consent.screen: "true"
       - id: 29219a74-9ea0-4711-81cf-5013063e8a42
         name: service_account
@@ -803,7 +803,7 @@ spec:
         protocol: openid-connect
         attributes:
           include.in.token.scope: "false"
-          consent.screen.text: $${rolesScopeConsentText}
+          consent.screen.text: ${rolesScopeConsentText}
           display.on.consent.screen: "true"
         protocolMappers:
           - id: 48fd4b91-2ae7-492a-8fdf-8b55d652f1c5
@@ -815,7 +815,7 @@ spec:
               user.attribute: foo
               introspection.token.claim: "true"
               access.token.claim: "true"
-              claim.name: resource_access.$${client_id}.roles
+              claim.name: resource_access.${client_id}.roles
               jsonType.label: String
               multivalued: "true"
           - id: d5d004fa-4a85-4ee7-95ec-3bd20cc78d9b
@@ -861,7 +861,7 @@ spec:
         protocol: openid-connect
         attributes:
           include.in.token.scope: "true"
-          consent.screen.text: $${profileScopeConsentText}
+          consent.screen.text: ${profileScopeConsentText}
           display.on.consent.screen: "true"
         protocolMappers:
           - id: db107ae6-b068-4fe7-acbb-dd2a38c3166a
@@ -1049,7 +1049,7 @@ spec:
         protocol: openid-connect
         attributes:
           include.in.token.scope: "true"
-          consent.screen.text: $${emailScopeConsentText}
+          consent.screen.text: ${emailScopeConsentText}
           display.on.consent.screen: "true"
         protocolMappers:
           - id: 2a632780-cf2c-4cb7-9a56-4a8071f7c848
@@ -1084,7 +1084,7 @@ spec:
         protocol: openid-connect
         attributes:
           include.in.token.scope: "true"
-          consent.screen.text: $${phoneScopeConsentText}
+          consent.screen.text: ${phoneScopeConsentText}
           display.on.consent.screen: "true"
         protocolMappers:
           - id: cc968ede-e0bc-42ac-a7ee-7f9d7755d730
