@@ -28,15 +28,15 @@ patches:
       - op: add
         path: /spec/patches/-
         value:
-          - target:
-              group: rbac.authorization.k8s.io
-              version: v1
-              kind: ClusterRoleBinding
-              name: keycloak-operator-clusterrole-binding
-            patch: |
-              - op: add
-                path: /subjects/-
-                value:
-                  kind: ServiceAccount
-                  name: keycloak-operator
-                  namespace: devops-keycloak
+          target:
+            group: rbac.authorization.k8s.io
+            version: v1
+            kind: ClusterRoleBinding
+            name: keycloak-operator-clusterrole-binding
+          patch: |
+            - op: add
+              path: /subjects/-
+              value:
+                kind: ServiceAccount
+                name: keycloak-operator
+                namespace: devops-keycloak
