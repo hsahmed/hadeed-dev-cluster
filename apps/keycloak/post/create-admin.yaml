@@ -103,7 +103,7 @@ spec:
             done
 
             if [ "$LOGGED_IN" != "true" ]; then
-              echo "Could not connect to Keycloak, retrying in $${RETRY_DELAY}s..."
+              echo "Could not connect to Keycloak, retrying in ${RETRY_DELAY}s..."
               sleep $RETRY_DELAY
               continue
             fi
@@ -118,7 +118,7 @@ spec:
               -s enabled=true \
               --truststore /truststore/truststore.jks \
               --id 2>&1); then
-              echo "Failed to create user: $USER_ID. Retrying in $${RETRY_DELAY}s..."
+              echo "Failed to create user: $USER_ID. Retrying in ${RETRY_DELAY}s..."
               sleep $RETRY_DELAY
               continue
             fi
@@ -130,7 +130,7 @@ spec:
               --username "$KC_NEW_ADMIN_USER" \
               --new-password "$KC_NEW_ADMIN_PASSWORD" \
               --truststore /truststore/truststore.jks 2>&1; then
-              echo "Failed to set password. Retrying in $${RETRY_DELAY}s..."
+              echo "Failed to set password. Retrying in ${RETRY_DELAY}s..."
               sleep $RETRY_DELAY
               continue
             fi
@@ -142,7 +142,7 @@ spec:
               --uusername "$KC_NEW_ADMIN_USER" \
               --rolename admin \
               --truststore /truststore/truststore.jks 2>&1; then
-              echo "Failed to add admin role. Retrying in $${RETRY_DELAY}s..."
+              echo "Failed to add admin role. Retrying in ${RETRY_DELAY}s..."
               sleep $RETRY_DELAY
               continue
             fi
@@ -151,7 +151,7 @@ spec:
             # Delete initial admin user
             INITIAL_ADMIN_ID=$($KCADM get users -r master -q username="$KC_INITIAL_ADMIN_USER" --fields id --format csv --noquotes --truststore /truststore/truststore.jks 2>&1)
             if [ -z "$INITIAL_ADMIN_ID" ]; then
-              echo "Could not find initial admin user to delete. Retrying in $${RETRY_DELAY}s..."
+              echo "Could not find initial admin user to delete. Retrying in ${RETRY_DELAY}s..."
               sleep $RETRY_DELAY
               continue
             fi
@@ -159,7 +159,7 @@ spec:
             if ! $KCADM delete users/"$INITIAL_ADMIN_ID" \
               -r master \
               --truststore /truststore/truststore.jks 2>&1; then
-              echo "Failed to delete initial admin. Retrying in $${RETRY_DELAY}s..."
+              echo "Failed to delete initial admin. Retrying in ${RETRY_DELAY}s..."
               sleep $RETRY_DELAY
               continue
             fi
