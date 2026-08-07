@@ -1,0 +1,41 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: devops-keycloak-pre
+  namespace: flux-system
+spec:
+  interval: 720m0s
+  timeout: 10m
+  dependsOn:
+    - name: devops-pgcluster
+    - name: keycloak-crd
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./apps/keycloak/pre
+  prune: true
+  wait: true
+  commonMetadata:
+    labels:
+      app.kubernetes.io/part-of: leptostack
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: devops-keycloak
+  namespace: flux-system
+spec:
+  interval: 720m0s
+  timeout: 10m
+  dependsOn:
+    - name: devops-keycloak-pre
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./apps/keycloak
+  prune: true
+  wait: true
+  commonMetadata:
+    labels:
+      app.kubernetes.io/part-of: leptostack
