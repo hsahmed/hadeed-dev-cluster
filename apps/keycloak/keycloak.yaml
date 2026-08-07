@@ -6,7 +6,7 @@ metadata:
 spec:
   db:
     vendor: postgres
-    host: devops-supabase-rw.devops-supabase.svc.cluster.local
+    host: devops-db-rw.devops-db.svc.cluster.local
     database: keycloak
     usernameSecret:
       name: keycloak-db
