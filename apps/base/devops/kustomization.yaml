@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - openbao.yaml
   - devops-pgcluster.yaml
+  - keycloak.yaml
