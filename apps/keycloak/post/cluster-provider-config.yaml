@@ -2,7 +2,7 @@
 apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret
 metadata:
-  name: internal-ca-push-secret
+  name: internal-ca-bundle
   namespace: devops-keycloak
 spec:
   refreshInterval: "0"
@@ -22,7 +22,7 @@ spec:
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
-  name: keycloak-provider-credentials
+  name: keycloak-provider
   namespace: devops-keycloak
 spec:
   refreshInterval: "0"
@@ -30,7 +30,7 @@ spec:
     name: devops-bao
     kind: ClusterSecretStore
   target:
-    name: keycloak-provider-credentials
+    name: keycloak-provider
     template:
       engineVersion: v2
       data:
@@ -60,4 +60,4 @@ metadata:
 spec:
   credentialsSecretRef:
     key: credentials
-    name: keycloak-provider-credentials
+    name: keycloak-provider

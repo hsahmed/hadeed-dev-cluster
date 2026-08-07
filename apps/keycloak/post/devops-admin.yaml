@@ -2,7 +2,7 @@
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
-  name: "devops-admin-secret"
+  name: devops-admin
   namespace: devops-keycloak
 spec:
   refreshInterval: "0"
@@ -25,7 +25,7 @@ spec:
 apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret
 metadata:
-  name: "devops-admin-push-secret"
+  name: "devops-admin"
   namespace: devops-keycloak
 spec:
   refreshInterval: "0"
@@ -81,7 +81,7 @@ spec:
 apiVersion: group.keycloak.m.crossplane.io/v1alpha1
 kind: Roles
 metadata:
-  name: devops-admins-roles
+  name: devops-admins
   namespace: devops-keycloak
 spec:
   providerConfigRef:
@@ -98,7 +98,7 @@ spec:
 apiVersion: user.keycloak.m.crossplane.io/v1alpha1
 kind: Groups
 metadata:
-  name: devops-admin-groups
+  name: devops-admins
   namespace: devops-keycloak
 spec:
   providerConfigRef:
