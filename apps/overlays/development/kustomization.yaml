@@ -35,8 +35,8 @@ patches:
               name: keycloak-operator-clusterrole-binding
             patch: |
               - op: add
-                path: "/subjects/-"
+                path: /subjects/-
                 value:
-                  - kind: ServiceAccount
-                    name: keycloak-operator
-                    namespace: devops-keycloak
+                  kind: ServiceAccount
+                  name: keycloak-operator
+                  namespace: devops-keycloak
