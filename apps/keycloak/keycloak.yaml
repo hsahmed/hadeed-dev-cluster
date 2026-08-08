@@ -4,6 +4,10 @@ metadata:
   name: devops-sso
   namespace: devops-keycloak
 spec:
+  bootstrapAdmin:
+    user:
+      secret: keycloak-admin
+  image: ghcr.io/micronisus/keycloak:26.7.1    
   db:
     vendor: postgres
     host: devops-db-rw.devops-db.svc.cluster.local

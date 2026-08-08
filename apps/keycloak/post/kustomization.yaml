@@ -3,5 +3,4 @@ kind: Kustomization
 resources:
   - cluster-provider-config.yaml
   - keycloak-realm-import.yaml
-  - create-admin.yaml
   - devops-admin.yaml

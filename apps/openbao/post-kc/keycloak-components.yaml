@@ -1,0 +1,68 @@
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: "openbao-kc-client"
+  namespace: devops-keycloak
+spec:
+  refreshInterval: "0"
+  refreshPolicy: CreatedOnce
+  target:
+    name: openbao-kc-client
+  dataFrom:
+  - sourceRef:
+      generatorRef:
+        apiVersion: generators.external-secrets.io/v1alpha1
+        kind: ClusterGenerator
+        name: "password-generator"
+    rewrite:
+    - regexp:
+        source: "password"
+        target: "client-secret"
+---
+apiVersion: external-secrets.io/v1alpha1
+kind: PushSecret
+metadata:
+  name: "openbao-kc-client"
+  namespace: devops-keycloak
+spec:
+  refreshInterval: "0"
+  secretStoreRefs:
+  - name: devops-bao
+    kind: ClusterSecretStore
+  selector:
+    secret:
+      name: openbao-kc-client
+  data:
+  - match:
+      secretKey: client-secret
+      remoteRef:
+        remoteKey: dynamic/openbao/openbao-kc-client
+        property: client-secret
+---
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: openbao
+  namespace: devops-keycloak
+spec:
+  providerConfigRef:
+    kind: ProviderConfig
+    name: devops-keycloak
+  forProvider:
+    realmId: devops
+    clientId: openbao
+    name: RabbitMQ
+    enabled: true
+    accessType: CONFIDENTIAL
+    standardFlowEnabled: true
+    directAccessGrantsEnabled: false
+    serviceAccountsEnabled: false
+    fullScopeAllowed: false
+    clientSecretSecretRef:
+      name: openbao-kc-client
+      key: client-secret
+    validRedirectUris:
+      - "https://creds.hadeed.dev/*"
+    webOrigins:
+      - "https://creds.hadeed.dev"

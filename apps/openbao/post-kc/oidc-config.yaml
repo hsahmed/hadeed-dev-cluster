@@ -1,0 +1,78 @@
+---
+apiVersion: auth.vault.m.upbound.io/v1alpha1
+kind: Backend
+metadata:
+  name: kubernetes
+  namespace: devops-openbao
+spec:
+  providerConfigRef:
+    name: openbao
+    kind: ProviderConfig
+  forProvider:
+    type: kubernetes
+---
+apiVersion: vault.vault.m.upbound.io/v1alpha1
+kind: Mount
+metadata:
+  name: k8s
+  namespace: devops-openbao
+spec:
+  providerConfigRef:
+    name: openbao
+    kind: ProviderConfig
+  forProvider:
+    path: k8s
+    type: kv
+---
+apiVersion: vault.vault.m.upbound.io/v1alpha1
+kind: Policy
+metadata:
+  name: eso-k8s
+  namespace: devops-openbao
+spec:
+  providerConfigRef:
+    name: openbao
+    kind: ProviderConfig
+  forProvider:
+    name: eso-k8s
+    policy: |
+      path "k8s/*" {
+        capabilities = ["read", "list"]
+      }
+      path "k8s/dynamic/*" {
+        capabilities = ["create", "update", "read", "list", "delete"]
+      }
+---
+apiVersion: kubernetes.vault.m.upbound.io/v1alpha1
+kind: AuthBackendConfig
+metadata:
+  name: kubernetes
+  namespace: devops-openbao
+spec:
+  providerConfigRef:
+    name: openbao
+    kind: ProviderConfig
+  forProvider:
+    backendRef:
+      name: kubernetes
+    kubernetesHost: "https://kubernetes.default.svc"
+---
+apiVersion: kubernetes.vault.m.upbound.io/v1alpha1
+kind: AuthBackendRole
+metadata:
+  name: eso-k8s
+  namespace: devops-openbao
+spec:
+  providerConfigRef:
+    name: openbao
+    kind: ProviderConfig
+  forProvider:
+    backendRef:
+      name: kubernetes
+    roleName: eso-k8s
+    boundServiceAccountNames:
+      - external-secrets-external-secrets
+    boundServiceAccountNamespaces:
+      - external-secrets
+    tokenPolicies:
+      - eso-k8s
